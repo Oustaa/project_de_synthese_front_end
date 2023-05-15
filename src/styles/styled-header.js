@@ -88,7 +88,7 @@ export const StyledActions = styled.div`
 
 export const StyledNav = styled.nav`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding-inline: var(--spacing-xxl);
 
@@ -105,7 +105,14 @@ export const StyledLinks = styled.div`
     gap: var(--spacing-xxl);
   }
 
-  a {
+  a,
+  button {
     color: var(--white);
+    background-color: transparent;
+    border: none;
+  }
+  .category {
+    font-weight: bold;
+    font-size: 1.1rem;
   }
 `;

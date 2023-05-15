@@ -10,7 +10,19 @@ import {
 } from "../../styles/styled-header";
 import { Link } from "react-router-dom";
 import { BsCart, BsPerson } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+
+const StyledSubCategories = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+`;
+
 const Header = () => {
+  const categories = useSelector((state) => state.categories.value);
+
   return (
     <StyledNavBar>
       <StyledHeader>
@@ -33,12 +45,18 @@ const Header = () => {
       </StyledHeader>
       <StyledNav>
         <StyledLinks>
-          <a href="/">Category</a>
-          <a href="/">Category</a>
-          <a href="/">Category</a>
-          <a href="/">Category</a>
-          <a href="/">Category</a>
-          <a href="/">Category</a>
+          {categories?.map((category) => (
+            <Link to={`/products/${category.name}`}>
+              <span className="category">{category.name}</span>
+              <StyledSubCategories>
+                {category.subCategories?.map((subCategory) => (
+                  <Link to={`/products/sub/${subCategory.name}`}>
+                    {subCategory.name}
+                  </Link>
+                ))}
+              </StyledSubCategories>
+            </Link>
+          ))}
         </StyledLinks>
         <StyledLinks>
           <Link to="/store.com/create">Create Store</Link>

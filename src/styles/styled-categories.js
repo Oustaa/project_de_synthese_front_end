@@ -12,7 +12,7 @@ export const StyledCategoriesContainer = styled.a`
   }
 `;
 
-export const StyledCategory = styled.a`
+export const StyledCategory = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,6 +25,11 @@ export const StyledCategory = styled.a`
     border-radius: 50%;
     padding-bottom: var(--spacing-sm);
     overflow: hidden;
+    img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
   }
 
   h2 {

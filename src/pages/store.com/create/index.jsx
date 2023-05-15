@@ -1,34 +1,16 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { logInStore } from "../../../features/auth-slice";
 import styled from "styled-components";
 import StoreName from "./StoreName";
-import StoreEmailPhone from "./StoreEmail";
-import StoreImages from "./StoreImages";
+import StoreEmail from "./StoreEmail";
+import StorePhone from "./StorePhone";
 import StorePassword from "./StorePassword";
+import { useNavigate } from "react-router-dom";
 
-import {
-  InputGroup,
-  StyledContainer,
-  StyledButton,
-  FlexContainer,
-} from "../../../styles/index";
-import { StyledLinks, StyledNav } from "../../../styles/styled-header";
-import { Link } from "react-router-dom";
+import { StyledContainer, StyledButton } from "../../../styles/index";
 import axios from "axios";
 
-const StyledLogInPage = styled.div`
-  padding-block: var(--spacing-xxl);
-  display: flex;
-  gap: var(--spacing-xl);
-  align-items: flex-start;
-  justify-content: center;
-  // height: calc(100vh - 80px);
-`;
-
-const StyledForm = styled.form`
-  width: 40%;
-`;
-
-// styled
 const StyledCreationHeaderFooter = styled.header`
   display: flex;
   align-items: center;
@@ -53,18 +35,19 @@ const StyledCreateBody = styled.div`
   }
 `;
 
-const Components = [StoreName, StoreEmailPhone, StorePassword, StoreImages];
-const titles = ["Name", "Email", "Password", "Images"];
+const Components = [StoreName, StoreEmail, StorePhone, StorePassword];
+const titles = ["Name", "Email", "Email", "Password"];
 
 const CreateStore = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [storeData, setStoreData] = useState({
     name: "",
     email: "",
     email_verified: false,
     password: "",
     phone_number: "",
-    avatar: "",
-    bgImg: "",
+    phone_verified: false,
   });
   const [step, setStep] = useState(0);
   const [canContinue, setCanContinue] = useState(false);
@@ -74,7 +57,7 @@ const CreateStore = () => {
   const nextHandler = () => {
     if (!canContinue) return;
     setStep((prev) => (prev += 1));
-    setCanContinue(false);
+    // setCanContinue(false);
   };
   const prevHandler = () => {
     setStep((prev) => (prev -= 1));
@@ -96,37 +79,34 @@ const CreateStore = () => {
     });
   };
 
-  const createStore = async () => {
-    const formData = new FormData();
+  const createStore = async (e) => {
+    e.preventDefault();
+    // const formData = new FormData();formData.append("images", [
+    //   { ...storeData.avatar, name: "avatar" },
+    //   { ...storeData.bgImg, name: "avatar" },
+    // ]);
 
-    formData.append("avatar", storeData.avatar);
-    formData.append("bg_image", storeData.bgImg);
-    formData.append("name", storeData.name);
-    formData.append("email", storeData.email);
-    formData.append("password", storeData.password);
-    formData.append("phone_number", storeData.phone_number);
-    formData.append("email_verified", storeData.email_verified);
+    try {
+      const respons = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/stores`,
+        storeData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const respons = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/stores`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-        },
-        params: {
-          name: storeData.name,
-          email: storeData.email,
-          password: storeData.password,
-          phone_number: "0641567728",
-        },
+      const responseData = await respons.data;
+
+      if (responseData.token && responseData.name) {
+        dispatch(logInStore(responseData));
+        navigate(`/store.com/${responseData.name}`);
       }
-    );
-
-    const responseData = await respons.json();
-
-    console.log(responseData);
+    } catch (error) {
+      // handle missing reauired fields and conflections
+      console.log(error);
+    }
   };
 
   return (
@@ -152,7 +132,9 @@ const CreateStore = () => {
           </StyledButton>
         )}
         {step === 3 ? (
-          <StyledButton onClick={createStore}>Create</StyledButton>
+          <form enctype="multipart/form-data" onSubmit={createStore}>
+            <StyledButton type="submit">Create</StyledButton>
+          </form>
         ) : (
           <StyledButton
             bgColor={!canContinue ? "var(--dark-500)" : "var(--primary-dark)"}

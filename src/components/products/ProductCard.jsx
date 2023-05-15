@@ -5,7 +5,7 @@ import {
   StyledProductImage,
   StyledProductBody,
 } from "../../styles/styled-product";
-const ProductCard = ({ _id, title, price, image, reviews }) => {
+const ProductCard = ({ _id, title, price, image, }) => {
   return (
     <Link to={`/product/${_id}`}>
       <StyledProduct title={title}>

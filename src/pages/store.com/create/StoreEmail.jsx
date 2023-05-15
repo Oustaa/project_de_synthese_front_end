@@ -58,7 +58,7 @@ const StoreEmailPhone = ({ setCanContinue, data, changeHandler }) => {
     if (!code) {
       const codeRundem = await sendEmailCode(
         email,
-        process.env.REACT_APP_SEND_GRID_X_KEY
+        process.env.REACT_APP_RAPID_API_X_KEY
       );
       setCode(codeRundem);
       return;

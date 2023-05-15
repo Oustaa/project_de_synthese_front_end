@@ -128,7 +128,12 @@ const StoreImages = ({ setCanContinue, data, imageChnageHandler }) => {
             crossorigin="anonymous"
             alt=""
           />
-          <input type="file" name="bgImg" onChange={changeBgImage} />
+          <input
+            type="file"
+            accept="image/*"
+            name="bgImg"
+            onChange={changeBgImage}
+          />
           <StyledButton bgColor="var(--white)" color="var(--dark-800)">
             <BiUpload />
           </StyledButton>
@@ -137,7 +142,12 @@ const StoreImages = ({ setCanContinue, data, imageChnageHandler }) => {
           <FlexContainer>
             <StyledAvatar>
               <img src={avatar} alt="" />
-              <input type="file" name="avatar" onChange={changeAvatarImage} />
+              <input
+                type="file"
+                accept="image/*"
+                name="avatar"
+                onChange={changeAvatarImage}
+              />
               <StyledButton bgColor="transparent" color="var(--dark-800)">
                 <BiUpload />
               </StyledButton>
