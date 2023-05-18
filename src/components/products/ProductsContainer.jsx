@@ -14,17 +14,18 @@ const products = [
   },
 ];
 
-const ProductsContainer = ({ title }) => {
+const ProductsContainer = ({ title, data }) => {
+  const products = data?.value;
+
   return (
     <StyledProducts>
       <header>
         <h2>{title || "Latest Visits"}</h2>
       </header>
       <StyledProductsContainer>
-        <ProductCard {...products[0]} />
-        <ProductCard {...products[0]} />
-        <ProductCard {...products[0]} />
-        <ProductCard {...products[0]} />
+        {products?.map((product) => (
+          <ProductCard {...product} />
+        ))}
       </StyledProductsContainer>
     </StyledProducts>
   );

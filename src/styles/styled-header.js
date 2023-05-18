@@ -88,7 +88,7 @@ export const StyledActions = styled.div`
 
 export const StyledNav = styled.nav`
   display: flex;
-  align-items: flex-start;
+  align-items: ${({ openMenu }) => (openMenu ? "flex-start" : "center")};
   justify-content: space-between;
   padding-inline: var(--spacing-xxl);
 
@@ -110,9 +110,16 @@ export const StyledLinks = styled.div`
     color: var(--white);
     background-color: transparent;
     border: none;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
   }
   .category {
-    font-weight: bold;
-    font-size: 1.1rem;
+    ${({ openMenu }) =>
+      openMenu &&
+      `font-weight: bold;
+      font-size: 1.1rem;`}}
   }
 `;

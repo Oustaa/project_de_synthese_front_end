@@ -27,10 +27,12 @@ export const StyledProduct = styled.div`
 export const StyledProductImage = styled.div`
   width: 100%;
   aspect-ratio: 1/0.6;
-  background-color: var(--dark-400);
+  // background-color: var(--dark-400);
   border-radius: var(--radius-sm);
 
   img {
+    width: 100%;
+    aspect-ratio: 1/0.6;
     object-fit: contain;
   }
 `;
