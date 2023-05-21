@@ -2,9 +2,9 @@ import React from "react";
 import { StyledCategory } from "../../styles/styled-categories";
 import { Link } from "react-router-dom";
 
-const Category = ({ name, image }) => {
+const Category = ({ name, _id, image }) => {
   return (
-    <Link to={`/products/${name}`}>
+    <Link to={`/products/${_id}`}>
       <StyledCategory>
         <div className="img">
           <img

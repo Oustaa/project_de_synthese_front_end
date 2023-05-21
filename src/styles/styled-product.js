@@ -13,7 +13,7 @@ export const StyledProducts = styled.div`
 export const StyledProductsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xxl);
 
   @media (max-width: 1000px) {
     grid-template-columns: repeat(2, 1fr);
@@ -40,10 +40,10 @@ export const StyledProductImage = styled.div`
 export const StyledProductBody = styled.div`
   h2 {
     font-size: 1.2rem;
-    // white-space: nowrap;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px;
   }
 
   div {

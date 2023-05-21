@@ -59,7 +59,7 @@ const Header = () => {
             {!openMenu ? <RxHamburgerMenu /> : <AiOutlineClose />}
           </StyledButton>
           {categories?.map((category) => (
-            <Link to={`/products/${category.name}`}>
+            <Link to={`/products/${category._id}`}>
               <span className="category">{category.name}</span>
               {openMenu && (
                 <StyledSubCategories>
