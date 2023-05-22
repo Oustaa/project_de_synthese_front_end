@@ -40,10 +40,10 @@ export const StyledProductImage = styled.div`
 export const StyledProductBody = styled.div`
   h2 {
     font-size: 1.2rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 400px;
+    // white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    // max-width: 400px;
   }
 
   div {

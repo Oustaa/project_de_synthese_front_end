@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyledNavBar,
   StyledHeader,
@@ -14,6 +14,7 @@ import { BsCart, BsPerson } from "react-icons/bs";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toggleMenu } from "../../features/ui-slice";
 const StyledSubCategories = styled.div`
@@ -24,9 +25,16 @@ const StyledSubCategories = styled.div`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.value);
   const openMenu = useSelector((state) => state.ui.openMenu);
+  const [query, setQuery] = useState("");
+
+  const searchHandler = (e) => {
+    e.preventDefault();
+    if (query.length >= 3) navigate(`/search/${query}`);
+  };
 
   return (
     <StyledNavBar>
@@ -37,17 +45,22 @@ const Header = () => {
             <span>Logo</span>
           </StyledLogo>
         </Link>
-        <StyledSearchForm>
-          <input placeholder="Search...." type="text" />
+        <StyledSearchForm onSubmit={searchHandler}>
+          <input
+            placeholder="Search...."
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
           <button>Search</button>
         </StyledSearchForm>
         <StyledActions>
           <button>
             Log in <BsPerson />
           </button>
-          <button>
+          <Link to={"/cart"}>
             Your Cart <BsCart />
-          </button>
+          </Link>
         </StyledActions>
       </StyledHeader>
       <StyledNav openMenu={openMenu}>
@@ -59,7 +72,7 @@ const Header = () => {
             {!openMenu ? <RxHamburgerMenu /> : <AiOutlineClose />}
           </StyledButton>
           {categories?.map((category) => (
-            <Link to={`/products/${category._id}`}>
+            <Link key={category._id} to={`/products/${category._id}`}>
               <span className="category">{category.name}</span>
               {openMenu && (
                 <StyledSubCategories>

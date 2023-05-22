@@ -3,6 +3,8 @@ import getSymbolFromCurrency from "currency-symbol-map";
 import { FlexContainer, InputGroup, StyledButton } from "../../styles";
 import styled from "styled-components";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setIds } from "../../features/cart-slice";
 
 const StyledCart = styled.div`
   position: sticky;
@@ -12,7 +14,7 @@ const StyledCart = styled.div`
 `;
 
 const Actions = ({ product }) => {
-  console.log(product);
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
   function createOption(num) {
@@ -23,6 +25,10 @@ const Actions = ({ product }) => {
     }
     return options;
   }
+
+  const addToCartHandler = () => {
+    dispatch(setIds({ _id: product._id, qte: quantity }));
+  };
 
   return (
     <StyledCart>
@@ -48,7 +54,7 @@ const Actions = ({ product }) => {
           </h3>
         </FlexContainer>
         <FlexContainer extraStyles={""}>
-          <StyledButton>Add to cart</StyledButton>
+          <StyledButton onClick={addToCartHandler}>Add to cart</StyledButton>
           <StyledButton>Add to wishlist</StyledButton>
         </FlexContainer>
         <StyledButton>Buy it now</StyledButton>
