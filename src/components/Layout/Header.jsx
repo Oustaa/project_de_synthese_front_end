@@ -77,7 +77,10 @@ const Header = () => {
               {openMenu && (
                 <StyledSubCategories>
                   {category.subCategories?.map((subCategory) => (
-                    <Link to={`/products/sub/${subCategory.name}`}>
+                    <Link
+                      key={subCategory.name}
+                      to={`/products/sub/${subCategory.name}`}
+                    >
                       {subCategory.name}
                     </Link>
                   ))}

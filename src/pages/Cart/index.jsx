@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 import CartProducts from "./CartProducts";
 import Loader from "../../components/Loader";
-import { StyledContainer } from "../../styles";
+import { StyledContainer, FlexContainer } from "../../styles";
 import { useSelector, useDispatch } from "react-redux";
 import { getCartProducts, getIds } from "../../features/cart-slice";
+import SavedForLaterProducts from "./SavedForLaterProducts";
+import CheckoutButton from "./CheckoutButton";
+import styled from "styled-components";
+
+const StyledCart = styled.div`
+  padding-block: var(--spacing-xxl);
+`;
 
 const Cart = () => {
   const dispatch = useDispatch();
   const [productsIds, setProductsIds] = useState([]);
-  const { ids, products, loading } = useSelector((state) => state.cart);
+  const { ids, products, savedLater, loading } = useSelector(
+    (state) => state.cart
+  );
 
   useEffect(() => {
     dispatch(getIds());
@@ -23,7 +32,13 @@ const Cart = () => {
 
   return (
     <StyledContainer>
-      <CartProducts ids={ids} products={products} />
+      <StyledCart>
+        <FlexContainer gap="var(--spacing-xl)" y="flex-start">
+          <CartProducts ids={ids} products={products} />
+          <CheckoutButton />
+        </FlexContainer>
+        <SavedForLaterProducts products={savedLater} />
+      </StyledCart>
     </StyledContainer>
   );
 };

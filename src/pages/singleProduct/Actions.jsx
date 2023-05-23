@@ -43,7 +43,9 @@ const Actions = ({ product }) => {
           id="qte"
         >
           {createOption(product.stock_Quantity).map((elem, i) => (
-            <option value={elem}>{elem}</option>
+            <option key={i} value={elem}>
+              {elem}
+            </option>
           ))}
         </select>
         <FlexContainer>

@@ -9,6 +9,8 @@ import Questions from "./Questions";
 import Suggestions from "./Suggestions";
 import { useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
+import { getIds } from "../../features/cart-slice";
+import { useDispatch } from "react-redux";
 
 async function getProduct(id, cb) {
   cb({ value: {}, loading: true });
@@ -24,6 +26,7 @@ async function getProduct(id, cb) {
 const StyledDisplayProduct = styled.div`
   display: flex;
   gap: var(--spacing-xxl);
+  position: relative;
   width: ${({ width }) => width || "100%"};
   height: calc(100% - 80px);
   padding-right: 5px;
@@ -31,6 +34,7 @@ const StyledDisplayProduct = styled.div`
 `;
 
 const DisplayProduct = ({ width }) => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [product, setProducts] = useState({
     value: {},
@@ -39,12 +43,12 @@ const DisplayProduct = ({ width }) => {
   });
 
   useEffect(() => {
-    getProduct(id, setProducts);
-  }, [id]);
+    dispatch(getIds());
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log(product);
-  }, [product]);
+    getProduct(id, setProducts);
+  }, [id]);
 
   if (product.loading) return <Loader />;
 

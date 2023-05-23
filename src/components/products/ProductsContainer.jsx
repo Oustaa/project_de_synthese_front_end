@@ -15,7 +15,7 @@ const ProductsContainer = ({ title, data }) => {
       </header>
       <StyledProductsContainer>
         {products?.map((product) => (
-          <ProductCard {...product} />
+          <ProductCard key={product._id} {...product} />
         ))}
       </StyledProductsContainer>
     </StyledProducts>

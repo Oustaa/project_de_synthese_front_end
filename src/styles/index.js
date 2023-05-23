@@ -46,9 +46,9 @@ export const InputGroup = styled.div`
 
 export const FlexContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: ${({ y }) => (y ? y : "center")};
   padding-block: var(--spacing-sm);
-  gap: var(--spacing-sm);
+  gap: ${({ gap }) => (gap ? gap : "var(--spacing-sm)")};
 `;
 
 export const StyledButton = styled.button`

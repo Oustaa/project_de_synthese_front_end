@@ -16,7 +16,7 @@ const GlobalStyles = createGlobalStyle`
         --dark-300: #B5B5B5;
         --dark-200: #D2D2D2;
         --dark-100: #D9D9D9;
-        --dark-000: #DEDEDE;
+        --dark-000: #F8F8F8;
         --white: #FFFFFF;
 
         --radius-lg: 5px;
@@ -30,7 +30,7 @@ const GlobalStyles = createGlobalStyle`
     
         --media-md: 1000px;
 
-        --boxShadow: rgba(0, 0, 0, 0.32) 1px 1px 14px -10px;
+        --boxShadow: rgba(0, 0, 0, 0.42) 2px 2px 14px -10px;
 
         font-size: 14px;
 

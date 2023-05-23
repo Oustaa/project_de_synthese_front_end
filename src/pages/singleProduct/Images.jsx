@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+
 const StyledImagesContainer = styled.div`
   width: 35%;
+  position: sticky;
+  top: 0;
 `;
 
 const StyledBigImage = styled.div`
@@ -11,6 +14,7 @@ const StyledBigImage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
   img {
     object-fit: contain;
     width: 100%;
@@ -58,22 +62,6 @@ const StyledImages = styled.div`
       align-items: center;
       justify-content: center;
     }
-  }
-`;
-
-const STyledImagePreview = styled.div`
-  width: 100%;
-  aspect-ratio: 1 / 0.8;
-  background-color: var(--dark-000);
-  border: 1px dashed var(--dark-400);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  h4 {
-    width: 80%;
-    text-align: center;
   }
 `;
 

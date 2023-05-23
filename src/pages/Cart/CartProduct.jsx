@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { deleteProduct, toggleQuantity } from "../../features/cart-slice";
+import { Link } from "react-router-dom";
+import {
+  deleteProduct,
+  toggleQuantity,
+  saveLater,
+} from "../../features/cart-slice";
 import { useDispatch, useSelector } from "react-redux";
 
 const StyledCartProduct = styled.div`
@@ -17,6 +22,7 @@ const StyledCartProductImage = styled.div`
   aspect-ratio: 1 / 1;
   padding-right: var(--spacing-xl);
   border-right: 1px dashed var(--dark-300);
+  background-color: var(--white);
   img {
     aspect-ratio: 1 /1;
     object-fit: contain;
@@ -105,7 +111,9 @@ const CartProduct = ({ images, store, title, price, currency, _id }) => {
             </button>
           </StyledCartProductQte>
           <button onClick={() => dispatch(deleteProduct(_id))}>Delete</button>
-          <button>Save For Later</button>
+          <button onClick={() => dispatch(saveLater(_id))}>
+            Save For Later
+          </button>
         </StyledCartProductActions>
       </StyledCartProductData>
     </StyledCartProduct>

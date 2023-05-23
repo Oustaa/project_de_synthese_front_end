@@ -57,7 +57,7 @@ const Questions = ({ product }) => {
       <StyledQuestions>
         {product.QandA.length ? (
           product.QandA.map((question) => (
-            <StyledQuestionContainer>
+            <StyledQuestionContainer key={question._id}>
               <div className="votes">
                 {/* <StyledButton bgColor="transparent" color="var(--dark-700)">
                 <BsCaretUp />

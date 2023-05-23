@@ -6,6 +6,9 @@ import { useEffect } from "react";
 const StyledCartContainer = styled.div`
   padding: var(--spacing-xl);
   width: 60%;
+  background-color: var(--dark-000);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--boxShadow);
 
   hr {
     margin-block: var(--spacing-lg) var(--spacing-xl);
@@ -24,7 +27,7 @@ const StyledCartSubTotal = styled.div`
 `;
 
 const CartEmpty = styled.div`
-  height: 500px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
