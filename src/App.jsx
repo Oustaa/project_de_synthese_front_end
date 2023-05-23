@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
+import Search from "./pages/Search";
 import SingleProduct from "./pages/singleProduct";
 import ProductsByCategory from "./pages/ProductsByCategory";
 import ProductsBySubCategory from "./pages/ProductsBySubCategory";
@@ -16,27 +17,23 @@ import GlobalStyles from "./styles/globalStyles";
 
 const App = () => {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="/Cart" element={<Cart />} />
-            <Route path="/product/:id" element={<SingleProduct />} />
-            <Route path="/products/:id" element={<ProductsByCategory />} />
-            <Route
-              path="/products/sub/:id"
-              element={<ProductsBySubCategory />}
-            />
-            <Route path="/store/:id">
-              <Route index element={<Store />} />
-              <Route path="products" element={<Products />} />
-            </Route>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/Cart" element={<Cart />} />
+          <Route path="/search/:query" element={<Search />} />
+          <Route path="/product/:id" element={<SingleProduct />} />
+          <Route path="/products/:id" element={<ProductsByCategory />} />
+          <Route path="/products/sub/:id" element={<ProductsBySubCategory />} />
+          <Route path="/store/:id">
+            <Route index element={<Store />} />
+            <Route path="products" element={<Products />} />
           </Route>
-        </Routes>
-        <GlobalStyles />
-      </Router>
-    </>
+        </Route>
+      </Routes>
+      <GlobalStyles />
+    </Router>
   );
 };
 export default App;
