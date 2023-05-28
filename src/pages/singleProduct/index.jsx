@@ -48,6 +48,9 @@ const DisplayProduct = ({ width }) => {
 
   useEffect(() => {
     getProduct(id, setProducts);
+
+    const visitsArray = JSON.parse(localStorage.getItem("visits")) || [];
+    localStorage.setItem("visits", JSON.stringify([id, ...visitsArray]));
   }, [id]);
 
   if (product.loading) return <Loader />;

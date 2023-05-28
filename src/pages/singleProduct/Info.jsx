@@ -63,7 +63,7 @@ const Info = ({ product }) => {
     <StyledInfoContainer>
       <h2>{product.title}</h2>
       <hr />
-      <Link to={`/store/${product.store_id}`}>{product.store}</Link>
+      <Link to={`/store/${product.store_id}`}>Item By {product.store}</Link>
       <FlexContainer gap={"var(--spacing-xl)"}>
         <div className="stars">
           <BsStarFill />

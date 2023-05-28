@@ -14,7 +14,7 @@ const StyledBigImage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
+  margin-bottom: var(--spacing-xl);
   img {
     object-fit: contain;
     width: 100%;

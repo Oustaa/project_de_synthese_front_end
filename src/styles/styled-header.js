@@ -25,14 +25,13 @@ export const StyledSearchForm = styled.form`
     padding: var(--spacing-sm);
     background-color: var(--dark-600);
     color: var(--white);
+
     &::-webkit-input-placeholder {
       color: var(--white);
     }
-
     &::-ms-input-placeholder {
       color: var(--white);
     }
-
     &:-ms-input-placeholder {
       color: var(--white);
     }

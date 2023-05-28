@@ -53,7 +53,7 @@ const StyledAskQuestion = styled.form`
 
 const Questions = ({ product }) => {
   return (
-    <StyledQuestionsSection>
+    <StyledQuestionsSection id="questions">
       <StyledQuestions>
         {product.QandA.length ? (
           product.QandA.map((question) => (

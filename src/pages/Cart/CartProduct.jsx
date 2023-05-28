@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Link } from "react-router-dom";
@@ -8,8 +8,12 @@ import {
   saveLater,
 } from "../../features/cart-slice";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+
+import Loader from "../../components/Loader";
 
 const StyledCartProduct = styled.div`
+  position: relative;
   display: flex;
   gap: var(--spacing-xl);
   border: 1px dashed var(--dark-300);
@@ -20,9 +24,12 @@ const StyledCartProduct = styled.div`
 const StyledCartProductImage = styled.div`
   width: 20%;
   aspect-ratio: 1 / 1;
-  padding-right: var(--spacing-xl);
+  padding-inline: var(--spacing-xl);
   border-right: 1px dashed var(--dark-300);
   background-color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   img {
     aspect-ratio: 1 /1;
     object-fit: contain;
@@ -74,49 +81,117 @@ const StyledCartProductQte = styled.div`
   }
 `;
 
+const loaderExtraStyles = `
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  height: 100%;
+  background: #d9d9d952;
+`;
+
 const CartProduct = ({ images, store, title, price, currency, _id }) => {
+  const [loading, setLoading] = useState(false);
+  const [updateQte, setUpdateQte] = useState(false);
   const dispatch = useDispatch();
-  const { qte } = useSelector((state) => state.cart.ids)[_id];
+  const { qte, saveLater: savedLater } = useSelector((state) => state.cart.ids)[
+    _id
+  ];
+
+  const toggleProductQte = async (num) => {
+    setLoading(true);
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/cart`,
+        {
+          product: _id,
+          qte: num,
+        },
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+    } catch (error) {
+    } finally {
+      setLoading(false);
+      dispatch(toggleQuantity({ id: _id, number: num }));
+    }
+  };
+
+  const deleteProducthandler = async () => {
+    setLoading(true);
+    try {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/cart/${_id}`, {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+    } catch (error) {
+    } finally {
+      setLoading(false);
+      dispatch(deleteProduct(_id));
+    }
+  };
+
+  const saveForLater = async () => {
+    // /cart/savedForLater
+    setLoading(true);
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/cart/savedForLater`,
+        {
+          product: _id,
+          savedLater: !savedLater,
+        },
+        {
+          headers: { Authorization: localStorage.getItem("token") },
+        }
+      );
+    } catch (error) {
+    } finally {
+      setLoading(false);
+      dispatch(saveLater(_id));
+    }
+  };
 
   return (
-    <StyledCartProduct>
-      <StyledCartProductImage>
-        <img
-          crossOrigin="anonymous"
-          src={`${process.env.REACT_APP_BASE_URL}/images/${store}/products/${images[0]}`}
-          alt={title}
-        />
-      </StyledCartProductImage>
-      <StyledCartProductData>
-        <StyledCartProductHeader>
-          <h3>{title}</h3>
-          <h2>
-            {getSymbolFromCurrency(currency)}
-            {price}
-          </h2>
-        </StyledCartProductHeader>
-        <StyledCartProductActions>
-          <StyledCartProductQte>
-            <h4>Qte:</h4>
-            <button
-              onClick={() => dispatch(toggleQuantity({ id: _id, number: 1 }))}
-            >
-              +
-            </button>
-            <h4>{qte}</h4>
-            <button
-              onClick={() => dispatch(toggleQuantity({ id: _id, number: -1 }))}
-            >
-              -
-            </button>
-          </StyledCartProductQte>
-          <button onClick={() => dispatch(deleteProduct(_id))}>Delete</button>
-          <button onClick={() => dispatch(saveLater(_id))}>
-            Save For Later
-          </button>
-        </StyledCartProductActions>
-      </StyledCartProductData>
-    </StyledCartProduct>
+    <>
+      <StyledCartProduct>
+        {loading && <Loader loaderExtraStyles={loaderExtraStyles} />}
+        <StyledCartProductImage>
+          <img
+            crossOrigin="anonymous"
+            src={`${process.env.REACT_APP_BASE_URL}/images/${store}/products/${images[0]}`}
+            alt={title}
+            title={title}
+          />
+        </StyledCartProductImage>
+        <StyledCartProductData>
+          <StyledCartProductHeader>
+            <h3>
+              <Link to={`/product/${_id}`}>{title.substring(0, 80)}...</Link>
+            </h3>
+            <h2>
+              {getSymbolFromCurrency(currency)}
+              {price}
+            </h2>
+          </StyledCartProductHeader>
+          <StyledCartProductActions>
+            {!updateQte ? (
+              <StyledCartProductQte>
+                <h4>Qte:</h4>
+                <button onClick={() => toggleProductQte(1)}>+</button>
+                <h4 onDoubleClick={() => setUpdateQte(true)}>{qte}</h4>
+
+                <button onClick={() => toggleProductQte(-1)}>-</button>
+              </StyledCartProductQte>
+            ) : (
+              "updateQte"
+            )}
+
+            <button onClick={deleteProducthandler}>Delete</button>
+            <button onClick={saveForLater}>Save For Later</button>
+          </StyledCartProductActions>
+        </StyledCartProductData>
+      </StyledCartProduct>
+    </>
   );
 };
 

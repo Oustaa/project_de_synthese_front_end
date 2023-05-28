@@ -3,11 +3,11 @@ import React from "react";
 import { StyledLoader } from "../styles";
 import { ClipLoader } from "react-spinners";
 
-const Loader = ({ height }) => {
+const Loader = ({ height, loaderExtraStyles }) => {
   return (
-    <StyledLoader height={height}>
+    <StyledLoader loaderExtraStyles={loaderExtraStyles} height={height}>
       <ClipLoader size={120} color={"var(--primary)"} />
-      <p>Loading....</p>
+      {/* <p>Loading....</p> */}
     </StyledLoader>
   );
 };

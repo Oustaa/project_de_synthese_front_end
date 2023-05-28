@@ -32,7 +32,12 @@ const CheckoutButton = () => {
   return (
     <StyledCheckOutContaier>
       <h3>
-        Subtotal ({products.length} items): ${totle}
+        Subtotal ({" "}
+        {Object.values(ids).reduce(
+          (sum, item) => (item.saveLater ? sum : sum + item.qte),
+          0
+        )}{" "}
+        items ): ${totle}
       </h3>
       <StyledButton>Porceed To Checkout</StyledButton>
     </StyledCheckOutContaier>

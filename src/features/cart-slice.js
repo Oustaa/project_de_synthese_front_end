@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const getCartProducts = createAsyncThunk("get/products", async (ids) => {
   const resp = await axios.post(`${process.env.REACT_APP_BASE_URL}/cart`, {
-    ids: Object.keys(ids),
+    ids: Object.keys(JSON.parse(localStorage.getItem("cart_products"))),
   });
 
   const data = await resp.data;
@@ -23,12 +23,16 @@ const cartSlice = createSlice({
     getIds: (state) => {
       state.ids = JSON.parse(localStorage.getItem("cart_products")) || {};
     },
-    setIds: (state, { payload: { _id, qte } }) => {
+    updateIds: (state, { payload }) => {
+      state.ids = payload;
+      localStorage.setItem("cart_products", JSON.stringify(payload));
+    },
+    setIds: (state, { payload: { _id, qte, price } }) => {
       if (state?.ids[_id]) state.ids[_id].qte += Number(qte);
       else
         state.ids = {
           ...state.ids,
-          [_id]: { qte: Number(qte), saveLater: false },
+          [_id]: { qte: Number(qte), saveLater: false, price },
         };
       localStorage.setItem("cart_products", JSON.stringify(state.ids));
     },
@@ -78,6 +82,9 @@ const cartSlice = createSlice({
         state.savedLater = products.filter(
           ({ _id }) => state.ids[_id].saveLater
         );
+      })
+      .addCase(getCartProducts.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
@@ -89,6 +96,7 @@ export const {
   toggleQuantity,
   saveLater,
   addToCart,
+  updateIds,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

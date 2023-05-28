@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setIds } from "../../features/cart-slice";
+import axios from "axios";
 
 const StyledCart = styled.div`
   position: sticky;
@@ -26,8 +27,25 @@ const Actions = ({ product }) => {
     return options;
   }
 
-  const addToCartHandler = () => {
-    dispatch(setIds({ _id: product._id, qte: quantity }));
+  const addToCartHandler = async () => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/cart/products`,
+        [
+          {
+            product: product._id,
+            qte: Number(quantity),
+            price: product.price,
+          },
+        ],
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+    } catch (error) {
+    } finally {
+      dispatch(
+        setIds({ _id: product._id, qte: quantity, price: product.price })
+      );
+    }
   };
 
   return (

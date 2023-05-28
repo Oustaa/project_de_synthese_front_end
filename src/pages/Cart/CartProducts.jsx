@@ -66,7 +66,12 @@ const CartProducts = ({ products, ids }) => {
       <hr />
       <StyledCartSubTotal>
         <h2>
-          Subtotal ({products.length} items): ${totle.toFixed(2)}
+          Subtotal (
+          {Object.values(ids).reduce(
+            (sum, item) => (item.saveLater ? sum : sum + item.qte),
+            0
+          )}
+          items): ${totle.toFixed(2)}
         </h2>
       </StyledCartSubTotal>
     </StyledCartContainer>

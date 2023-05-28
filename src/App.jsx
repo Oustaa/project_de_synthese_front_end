@@ -9,16 +9,26 @@ import ProductsByCategory from "./pages/ProductsByCategory";
 import ProductsBySubCategory from "./pages/ProductsBySubCategory";
 import Store from "./pages/store";
 import Products from "./pages/store/Products";
-
+import LogIn from "./pages/LogIn";
+import Register from "./pages/Rejester";
 import Layout from "./components/Layout/Layout";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 import GlobalStyles from "./styles/globalStyles";
+import { useSelector } from "react-redux";
+import Loader from "./components/Loader";
 
 const App = () => {
+  const { loading } = useSelector((state) => state.auth);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <Router>
       <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<LogIn />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/Cart" element={<Cart />} />

@@ -3,7 +3,6 @@ import {
   StyledNavBar,
   StyledHeader,
   StyledLogo,
-  StyledSearchForm,
   StyledActions,
   StyledNav,
   StyledLinks,
@@ -14,9 +13,9 @@ import { BsCart, BsPerson } from "react-icons/bs";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toggleMenu } from "../../features/ui-slice";
+import Search from "./Search";
 const StyledSubCategories = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,16 +24,11 @@ const StyledSubCategories = styled.div`
 `;
 
 const Header = () => {
-  const navigate = useNavigate();
+  const username = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
+
   const categories = useSelector((state) => state.categories.value);
   const openMenu = useSelector((state) => state.ui.openMenu);
-  const [query, setQuery] = useState("");
-
-  const searchHandler = (e) => {
-    e.preventDefault();
-    if (query.length >= 3) navigate(`/search/${query}`);
-  };
 
   return (
     <StyledNavBar>
@@ -45,19 +39,18 @@ const Header = () => {
             <span>Logo</span>
           </StyledLogo>
         </Link>
-        <StyledSearchForm onSubmit={searchHandler}>
-          <input
-            placeholder="Search...."
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button>Search</button>
-        </StyledSearchForm>
+        <Search />
         <StyledActions>
-          <button>
-            Log in <BsPerson />
-          </button>
+          {username ? (
+            <Link to="/profile/">
+              {username} <BsPerson />
+            </Link>
+          ) : (
+            <Link to="/login">
+              Log in <BsPerson />
+            </Link>
+          )}
+
           <Link to={"/cart"}>
             Your Cart <BsCart />
           </Link>
@@ -90,8 +83,12 @@ const Header = () => {
           ))}
         </StyledLinks>
         <StyledLinks>
-          <Link to="http://localhost:3001/login">Create Store</Link>
-          <Link to="http://localhost:3001/">Your Store</Link>
+          <Link target="_blank" to="http://localhost:3001/login">
+            Create Store
+          </Link>
+          <Link target="_blank" to="http://localhost:3001/">
+            Your Store
+          </Link>
         </StyledLinks>
       </StyledNav>
     </StyledNavBar>
