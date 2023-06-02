@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setIds } from "../../features/cart-slice";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 
 const StyledCart = styled.div`
   position: sticky;
@@ -14,9 +15,16 @@ const StyledCart = styled.div`
   padding: var(--spacing-lg);
 `;
 
+const extraStyles = `
+  & > * {
+    width: 50%;
+  }
+`;
+
 const Actions = ({ product }) => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   function createOption(num) {
     const options = [];
@@ -28,7 +36,9 @@ const Actions = ({ product }) => {
   }
 
   const addToCartHandler = async () => {
+    if (loading) return;
     try {
+      setLoading(true);
       await axios.post(
         `${process.env.REACT_APP_BASE_URL}/cart/products`,
         [
@@ -42,6 +52,7 @@ const Actions = ({ product }) => {
       );
     } catch (error) {
     } finally {
+      setLoading(false);
       dispatch(
         setIds({ _id: product._id, qte: quantity, price: product.price })
       );
@@ -73,11 +84,17 @@ const Actions = ({ product }) => {
             {(quantity * product?.price).toFixed(2)}
           </h3>
         </FlexContainer>
-        <FlexContainer extraStyles={""}>
-          <StyledButton onClick={addToCartHandler}>Add to cart</StyledButton>
+        <FlexContainer extraStyles={extraStyles}>
+          <StyledButton onClick={addToCartHandler}>
+            {loading ? (
+              <ClipLoader size={12} color="var(--white)" />
+            ) : (
+              "Add to cart"
+            )}
+          </StyledButton>
           <StyledButton>Add to wishlist</StyledButton>
         </FlexContainer>
-        <StyledButton>Buy it now</StyledButton>
+        <StyledButton extraStyles={`width: 100%;`}>Buy it now</StyledButton>
       </InputGroup>
     </StyledCart>
   );

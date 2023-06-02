@@ -6,6 +6,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { login } from "../../features/auth-slice";
 import { updateIds } from "../../features/cart-slice";
+import Loader from "../../components/Loader";
+import { ClipLoader } from "react-spinners";
 
 const StyledLogInPage = styled.div`
   height: 100vh;
@@ -37,6 +39,8 @@ const Index = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+  const [logginIn, setLogginIn] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     email: { value: "", valid: true },
@@ -53,6 +57,8 @@ const Index = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      setLogginIn(true);
+      // log user in
       const resp = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/auth/users/login`,
         { email: userInfo.email.value, password: userInfo.password.value }
@@ -61,11 +67,12 @@ const Index = () => {
       const data = await resp.data;
 
       if (data.token) {
+        setLoading(true);
         localStorage.setItem("token", data.token);
         dispatch(login(data));
 
         const cartsProducts = Object.keys(
-          JSON.parse(localStorage.getItem("cart_products"))
+          JSON.parse(localStorage.getItem("cart_products")) || []
         ).map((id) => {
           return {
             product: id,
@@ -73,6 +80,7 @@ const Index = () => {
           };
         });
 
+        // update it's cart
         const postCartsProductsReq = await axios.post(
           `${process.env.REACT_APP_BASE_URL}/cart/products`,
           cartsProducts,
@@ -92,9 +100,33 @@ const Index = () => {
               price: item.price,
             })
         );
+        console.log(JSON.parse(localStorage.getItem("visits")));
+        // update it's visits
+        const updateUsereVisits = await axios.post(
+          `${process.env.REACT_APP_BASE_URL}/users/visits`,
+          { visits: JSON.parse(localStorage.getItem("visits")) || [] },
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          }
+        );
+
+        const updatedVisits = await updateUsereVisits.data;
+        localStorage.setItem("visits", JSON.stringify(updatedVisits));
+
+        // update it's visits
+        const updateUsereSearch = await axios.post(
+          `${process.env.REACT_APP_BASE_URL}/users/search`,
+          { search: JSON.parse(localStorage.getItem("search")) || [] },
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          }
+        );
+
+        const updatedSearches = await updateUsereSearch.data;
+        localStorage.setItem("search", JSON.stringify(updatedSearches));
 
         dispatch(updateIds(ids));
-        navigate(searchParams.get("navigate") || -1);
+        navigate(`/${searchParams.get("navigate")}` || -1);
       }
     } catch (e) {
       console.log(e);
@@ -109,8 +141,15 @@ const Index = () => {
             password: { value: prev.password.value, valid: false },
           };
         });
+    } finally {
+      setLoading(false);
+      setLogginIn(false);
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <StyledContainer>
@@ -136,7 +175,13 @@ const Index = () => {
               onChange={changeHandler}
             />
           </InputGroup>
-          <StyledButton>Log in</StyledButton>
+          <StyledButton>
+            {logginIn ? (
+              <ClipLoader size={12} color="var(--white)" />
+            ) : (
+              "Log in"
+            )}
+          </StyledButton>
           <br />
           <br />
           <Link to={"/register"}>Create a new account</Link>

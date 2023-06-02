@@ -10,12 +10,14 @@ import {
 import { StyledButton } from "../../styles";
 import { Link } from "react-router-dom";
 import { BsCart, BsPerson } from "react-icons/bs";
+import { CiLogout } from "react-icons/ci";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { toggleMenu } from "../../features/ui-slice";
 import Search from "./Search";
+
 const StyledSubCategories = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,6 +32,11 @@ const Header = () => {
   const categories = useSelector((state) => state.categories.value);
   const openMenu = useSelector((state) => state.ui.openMenu);
 
+  const logOut = () => {
+    localStorage.clear();
+    window.location.reload(false);
+  };
+
   return (
     <StyledNavBar>
       <StyledHeader>
@@ -41,19 +48,23 @@ const Header = () => {
         </Link>
         <Search />
         <StyledActions>
+          <Link to={"/cart"}>
+            Your Cart <BsCart />
+          </Link>
           {username ? (
-            <Link to="/profile/">
-              {username} <BsPerson />
-            </Link>
+            <>
+              <Link to="/profile/">
+                {username} <BsPerson />
+              </Link>
+              <Link onClick={logOut}>
+                Log out <CiLogout />
+              </Link>
+            </>
           ) : (
             <Link to="/login">
               Log in <BsPerson />
             </Link>
           )}
-
-          <Link to={"/cart"}>
-            Your Cart <BsCart />
-          </Link>
         </StyledActions>
       </StyledHeader>
       <StyledNav openMenu={openMenu}>

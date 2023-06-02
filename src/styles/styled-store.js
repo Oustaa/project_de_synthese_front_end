@@ -1,15 +1,19 @@
 import styled from "styled-components";
 
-export const StyledStore = styled.div`
+export const StyledStore = styled.header`
+  width: 100%;
+`;
+
+export const StyledStoreHeader = styled.header`
   width: 100%;
 `;
 
 export const StyledBgimage = styled.div`
   background-color: var(--dark-100);
   width: 100%;
-  aspect-ratio: 1/0.2;
+  aspect-ratio: 1 / 0.2;
   position: relative;
-  max-height: 300px;
+
   input {
     position: absolute;
     inset: 0 0 0 0;
@@ -36,7 +40,7 @@ export const StyledBgimage = styled.div`
   img {
     width: 100%;
     max-height: 100%;
-    aspect-ratio: 1/0.2;
+    aspect-ratio: 1 / 0.2;
     object-fit: cover;
   }
 `;

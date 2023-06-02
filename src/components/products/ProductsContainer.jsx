@@ -6,7 +6,7 @@ import {
 } from "../../styles/styled-product";
 import Loader from "../Loader";
 
-const ProductsContainer = ({ title, data }) => {
+const ProductsContainer = ({ title, data, numProd, titleLong }) => {
   const products = data?.value;
 
   return (
@@ -15,11 +15,11 @@ const ProductsContainer = ({ title, data }) => {
         <h2>{title}</h2>
       </header>
       {data?.loading ? (
-        <Loader height={"400px"} />
+        <Loader height={"300px"} />
       ) : (
-        <StyledProductsContainer>
+        <StyledProductsContainer numProd={numProd}>
           {products?.map((product) => (
-            <ProductCard key={product._id} {...product} />
+            <ProductCard titleLong={titleLong} key={product._id} {...product} />
           ))}
         </StyledProductsContainer>
       )}

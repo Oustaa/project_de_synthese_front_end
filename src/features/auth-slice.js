@@ -17,15 +17,20 @@ export const isLoggedIn = createAsyncThunk("/is/loggedin", async () => {
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: { token: null, username: "", loading: true },
+  initialState: { token: null, username: "", currency: "USD", loading: true },
   reducers: {
     login: (state, { payload }) => {
       state.token = payload.token;
       state.username = payload.username;
+      state.currency = payload.currency;
     },
     logout: (state) => {
       state.token = null;
       state.username = "";
+      state.currency = "USD";
+    },
+    setCurrency: (state, { payload }) => {
+      state.currency = payload;
     },
   },
   extraReducers: (builder) => {
@@ -36,17 +41,20 @@ const authSlice = createSlice({
       .addCase(isLoggedIn.fulfilled, (state, { payload }) => {
         if (!payload.token && !payload.username) {
           localStorage.removeItem("cart_products");
+          localStorage.removeItem("visits");
         }
         state.username = payload.username;
         state.token = payload.token;
         state.loading = false;
       })
       .addCase(isLoggedIn.rejected, (state) => {
+        localStorage.removeItem("cart_products");
+        localStorage.removeItem("visits");
         state.loading = false;
       });
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setCurrency } = authSlice.actions;
 
 export default authSlice.reducer;

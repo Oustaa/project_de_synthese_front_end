@@ -10,15 +10,51 @@ import Suggestions from "./Suggestions";
 import { useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { getIds } from "../../features/cart-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-async function getProduct(id, cb) {
+async function getPrice({ from, to, value }) {
+  const options = {
+    method: "GET",
+    url: "https://currency-converter-pro1.p.rapidapi.com/convert",
+    params: {
+      from: from,
+      to: to,
+      amount: value,
+    },
+    headers: {
+      "X-RapidAPI-Key": "f8cdae9dd3msh8dcbc3f61ded3cep1d39d9jsn33b92ef93b96",
+      "X-RapidAPI-Host": "currency-converter-pro1.p.rapidapi.com",
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    return await response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getProduct(id, cb, userCurrency) {
   cb({ value: {}, loading: true });
   const resp = await axios.get(
     `${process.env.REACT_APP_BASE_URL}/products/${id}`
   );
 
   const data = await resp.data;
+
+  const toCurrency = userCurrency || localStorage.getItem("currency");
+
+  if (data.currency !== toCurrency) {
+    const priceConvert = await getPrice({
+      from: data.currency,
+      to: toCurrency,
+      value: data.price,
+    });
+    console.log(priceConvert);
+    data.price = priceConvert.result;
+    data.currency = toCurrency;
+  }
 
   cb({ value: data, loading: false });
 }
@@ -34,9 +70,11 @@ const StyledDisplayProduct = styled.div`
 `;
 
 const DisplayProduct = ({ width }) => {
+  const userCurrency = useSelector((state) => state.auth.currency);
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [product, setProducts] = useState({
+
+  const [product, setProduct] = useState({
     value: {},
     loading: true,
     error: null,
@@ -47,11 +85,14 @@ const DisplayProduct = ({ width }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    getProduct(id, setProducts);
+    getProduct(id, setProduct, userCurrency);
 
     const visitsArray = JSON.parse(localStorage.getItem("visits")) || [];
-    localStorage.setItem("visits", JSON.stringify([id, ...visitsArray]));
-  }, [id]);
+    localStorage.setItem(
+      "visits",
+      JSON.stringify(new Array(...new Set([id, ...visitsArray])))
+    );
+  }, [id, userCurrency]);
 
   if (product.loading) return <Loader />;
 

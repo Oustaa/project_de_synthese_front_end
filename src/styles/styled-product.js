@@ -12,11 +12,17 @@ export const StyledProducts = styled.div`
 
 export const StyledProductsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(
+    ${({ numProd }) => (numProd ? numProd : 4)},
+    1fr
+  );
   gap: var(--spacing-xxl);
 
   @media (max-width: 1000px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(
+      ${({ numProd }) => (numProd ? numProd / 2 : 2)},
+      1fr
+    );
   }
 `;
 
@@ -27,7 +33,6 @@ export const StyledProduct = styled.div`
 export const StyledProductImage = styled.div`
   width: 100%;
   aspect-ratio: 1/0.6;
-  // background-color: var(--dark-400);
   border-radius: var(--radius-sm);
 
   img {

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { StyledSearchForm } from "../../styles/styled-header";
 
@@ -15,6 +15,11 @@ const StyledSearchHistory = styled.div`
   border-bottom-left-radius: var(--radius-lg);
   position: absolute;
   z-index: 1000;
+`;
+
+const StyledSearchBackDrop = styled.div`
+  position: absolute;
+  inset: 0 0 0 0;
 `;
 
 const StyledSearchLink = styled.div`
@@ -34,9 +39,26 @@ const StyledSearchLink = styled.div`
 const Search = () => {
   const searchInputRef = useRef();
   const [showSearch, setShowSearch] = useState(false);
-  const searchQueries = JSON.parse(localStorage.getItem("search")) || [];
+  const [searchQueries, setSearchQueries] = useState(
+    JSON.parse(localStorage.getItem("search")) || []
+  );
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+
+  const changeHandler = (e) => {
+    console.log(e.nativeEvent.key);
+    const { value } = e.target;
+    if (value === "") {
+      setSearchQueries(JSON.parse(localStorage.getItem("search")) || []);
+    } else {
+      const regex = new RegExp(value, "g");
+      setSearchQueries((prev) => {
+        const queries = prev.filter((query) => regex.test(query));
+        return new Array(...new Set([...queries]));
+      });
+    }
+    setQuery(value);
+  };
 
   const searchHandler = (e) => {
     e.preventDefault();
@@ -62,32 +84,46 @@ const Search = () => {
     navigate(`/search/${value}`);
   };
 
+  const escClickHandler = (e) => {
+    if (e.keyCode === 27) {
+      setShowSearch(false);
+      searchInputRef.current.blur();
+    }
+    changeHandler(e);
+  };
+
   return (
-    <StyledSearchContainer>
-      <StyledSearchForm onSubmit={searchHandler}>
-        <input
-          ref={searchInputRef}
-          placeholder="Search...."
-          type="text"
-          value={query}
-          onFocus={() => setShowSearch(true)}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button>Search</button>
-      </StyledSearchForm>
-      {showSearch && searchQueries.length ? (
-        <StyledSearchHistory>
-          {searchQueries.slice(0, 6).map((search, i) => (
-            <StyledSearchLink
-              onClick={() => clickSearchHandler(search)}
-              key={i}
-            >
-              <span>{search}</span>
-            </StyledSearchLink>
-          ))}
-        </StyledSearchHistory>
+    <>
+      {showSearch ? (
+        <StyledSearchBackDrop onClick={() => setShowSearch(false)} />
       ) : null}
-    </StyledSearchContainer>
+
+      <StyledSearchContainer onKeyDown={escClickHandler}>
+        <StyledSearchForm onSubmit={searchHandler}>
+          <input
+            ref={searchInputRef}
+            placeholder="Search...."
+            type="text"
+            value={query}
+            onFocus={() => setShowSearch(true)}
+            onChange={changeHandler}
+          />
+          <button>Search</button>
+        </StyledSearchForm>
+        {showSearch && searchQueries.length ? (
+          <StyledSearchHistory>
+            {searchQueries.slice(0, 6).map((search, i) => (
+              <StyledSearchLink
+                onClick={() => clickSearchHandler(search)}
+                key={i}
+              >
+                <span>{search}</span>
+              </StyledSearchLink>
+            ))}
+          </StyledSearchHistory>
+        ) : null}
+      </StyledSearchContainer>
+    </>
   );
 };
 

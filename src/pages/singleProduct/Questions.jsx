@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { InputGroup, StyledButton } from "../../styles";
 import styled from "styled-components";
 import { BsCaretUp, BsCaretDown } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const StyledQuestionsSection = styled.section`
   display: flex;
@@ -52,6 +55,32 @@ const StyledAskQuestion = styled.form`
 `;
 
 const Questions = ({ product }) => {
+  const username = useSelector((state) => state.auth.username);
+  const [question, setQuestion] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const askQuestion = async (e) => {
+    e.preventDefault();
+
+    if (question.length < 20) return;
+    setLoading(true);
+    try {
+      const resp = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/products/question/${product._id}`,
+        { text: question },
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+      const data = await resp.data;
+      if (data.modifiedCount === 1) {
+        setQuestion("");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <StyledQuestionsSection id="questions">
       <StyledQuestions>
@@ -92,14 +121,30 @@ const Questions = ({ product }) => {
           </>
         )}
       </StyledQuestions>
-      <StyledAskQuestion>
-        <InputGroup>
-          <label htmlFor="ask">
-            <h3>Ask:</h3>
-          </label>
-          <textarea name="" id="" rows="4"></textarea>
-          <StyledButton>Ask</StyledButton>
-        </InputGroup>
+      <StyledAskQuestion onSubmit={askQuestion}>
+        {username ? (
+          <InputGroup>
+            <label htmlFor="ask">
+              <h3>Ask:</h3>
+            </label>
+            <textarea
+              rows="4"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            ></textarea>
+            <StyledButton>{loading ? "Loading" : "Ask"}</StyledButton>
+          </InputGroup>
+        ) : (
+          <>
+            <h2>Log in to ask a Question.</h2>
+
+            <StyledButton>
+              <Link to={"/login"} style={{ color: "white" }}>
+                Log in
+              </Link>
+            </StyledButton>
+          </>
+        )}
       </StyledAskQuestion>
     </StyledQuestionsSection>
   );

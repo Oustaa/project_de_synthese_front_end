@@ -7,11 +7,12 @@ import Search from "./pages/Search";
 import SingleProduct from "./pages/singleProduct";
 import ProductsByCategory from "./pages/ProductsByCategory";
 import ProductsBySubCategory from "./pages/ProductsBySubCategory";
-import Store from "./pages/store";
 import Products from "./pages/store/Products";
 import LogIn from "./pages/LogIn";
 import Register from "./pages/Rejester";
 import Layout from "./components/Layout/Layout";
+import Store from "./pages/store";
+import StoreLayout from "./pages/store/Layout";
 
 import GlobalStyles from "./styles/globalStyles";
 import { useSelector } from "react-redux";
@@ -36,7 +37,7 @@ const App = () => {
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/products/:id" element={<ProductsByCategory />} />
           <Route path="/products/sub/:id" element={<ProductsBySubCategory />} />
-          <Route path="/store/:id">
+          <Route path="/store/:id" element={<StoreLayout />}>
             <Route index element={<Store />} />
             <Route path="products" element={<Products />} />
           </Route>

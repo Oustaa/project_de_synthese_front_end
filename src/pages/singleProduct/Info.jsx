@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FlexContainer } from "../../styles";
 import { BsStarFill } from "react-icons/bs";
@@ -78,7 +78,7 @@ const Info = ({ product }) => {
       </FlexContainer>
       <hr />
       <h2 className="price">
-        {getSymbolFromCurrency(product.currency) + product.price}
+        {getSymbolFromCurrency(product.currency) + product.price.toFixed(2)}
       </h2>
 
       {product.specifications && product?.specifications?.length > 0 && (

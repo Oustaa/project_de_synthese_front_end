@@ -49,6 +49,7 @@ export const FlexContainer = styled.div`
   align-items: ${({ y }) => (y ? y : "center")};
   padding-block: var(--spacing-sm);
   gap: ${({ gap }) => (gap ? gap : "var(--spacing-sm)")};
+  ${({ extraStyles }) => extraStyles};
 `;
 
 export const StyledButton = styled.button`
@@ -59,6 +60,7 @@ export const StyledButton = styled.button`
   border: none;
   border-radius: var(--radius-lg);
   color: ${({ color }) => (color ? color : "var(--white)")};
+  ${({ extraStyles }) => extraStyles};
 `;
 
 export const StyledBigInput = styled.input`

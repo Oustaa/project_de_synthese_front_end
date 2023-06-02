@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   StyledProduct,
@@ -6,10 +6,100 @@ import {
   StyledProductBody,
 } from "../../styles/styled-product";
 import getSymbolFromCurrency from "currency-symbol-map";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-const ProductCard = ({ _id, title, price, images, currency, store }) => {
+function isElementVisible(element) {
+  if (!element) return;
+  const rect = element?.getBoundingClientRect();
+  const viewportHeight =
+    window.innerHeight || document.documentElement.clientHeight;
+
+  return rect.top >= 0 && rect.left >= 0 && rect.bottom <= viewportHeight;
+}
+
+async function viewedProduct(id) {
+  axios.put(`${process.env.REACT_APP_BASE_URL}/products/viewed/${id}`);
+}
+
+async function getPrice({ from, to, value }, cb) {
+  const options = {
+    method: "GET",
+    url: "https://currency-converter-pro1.p.rapidapi.com/convert",
+    params: {
+      from: from,
+      to: to,
+      amount: value,
+    },
+    headers: {
+      "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_X_KEY,
+      "X-RapidAPI-Host": "currency-converter-pro1.p.rapidapi.com",
+    },
+  };
+
+  try {
+    if (from === to) {
+      cb(value);
+    } else {
+      const response = await axios.request(options);
+      const data = await response.data;
+      cb(data.result);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const ProductCard = ({
+  _id,
+  title,
+  price,
+  images,
+  currency,
+  store,
+  titleLong,
+}) => {
+  const userCurrency = useSelector((state) => state.auth.currency);
+  const productRef = useRef();
+  const [visible, setVisible] = useState(false);
+  const [convertedPrice, setConvertedPrice] = useState(0.0);
+
+  useEffect(() => {
+    getPrice(
+      {
+        from: currency,
+        to: userCurrency || localStorage.getItem("currency") || currency,
+        value: price,
+      },
+      setConvertedPrice
+    );
+
+    if (isElementVisible(productRef.current)) {
+      setVisible(true);
+    }
+  }, [userCurrency, currency, price]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isElementVisible(productRef.current)) {
+        setVisible(true);
+      }
+    };
+
+    if (visible) {
+      window.removeEventListener("scroll", handleScroll);
+      viewedProduct(_id);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [_id, visible]);
+
   return (
-    <Link to={`/product/${_id}`}>
+    <Link ref={productRef} to={`/product/${_id}`}>
       <StyledProduct title={title}>
         <StyledProductImage>
           <img
@@ -19,11 +109,13 @@ const ProductCard = ({ _id, title, price, images, currency, store }) => {
           />
         </StyledProductImage>
         <StyledProductBody>
-          <h2 title={title}>{title}</h2>
+          <h2 title={title}>{title.substring(0, titleLong || 150)}...</h2>
           <div>
             <h3>
-              {getSymbolFromCurrency(currency)}
-              {price}
+              {getSymbolFromCurrency(
+                userCurrency || localStorage.getItem("currency") || currency
+              )}
+              {convertedPrice.toFixed(2)}
             </h3>
             <h3>New</h3>
           </div>
