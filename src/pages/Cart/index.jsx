@@ -25,7 +25,7 @@ const Cart = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getCartProducts(productsIds));
+    dispatch(getCartProducts());
   }, [dispatch, productsIds]);
 
   if (loading) return <Loader />;

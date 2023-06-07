@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Link } from "react-router-dom";
 import {
@@ -9,78 +8,15 @@ import {
 } from "../../features/cart-slice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-
 import Loader from "../../components/Loader";
-
-const StyledCartProduct = styled.div`
-  position: relative;
-  display: flex;
-  gap: var(--spacing-xl);
-  border: 1px dashed var(--dark-300);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-`;
-
-const StyledCartProductImage = styled.div`
-  width: 20%;
-  aspect-ratio: 1 / 1;
-  padding-inline: var(--spacing-xl);
-  border-right: 1px dashed var(--dark-300);
-  background-color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  img {
-    aspect-ratio: 1 /1;
-    object-fit: contain;
-  }
-`;
-
-const StyledCartProductData = styled.div`
-  width: 80%;
-`;
-
-const StyledCartProductHeader = styled.div`
-  display: flex;
-  gap: var(--spacing-lg);
-  justify-content: space-between;
-  margin-bottom: var(--spacing-lg);
-`;
-
-const StyledCartProductActions = styled.div`
-  display: flex;
-  align-items: center;
-
-  & > * {
-    margin-right: var(--spacing-xl);
-  }
-
-  & > button {
-    border: none;
-    background-color: transparent;
-    color: var(--dark-800);
-  }
-`;
-
-const StyledCartProductQte = styled.div`
-  display: flex;
-  align-items: center;
-  & > * {
-    margin-inline: 5px;
-  }
-
-  h5 {
-  }
-
-  button {
-    background-color: var(--dark-200);
-    border: none;
-    border-radius: var(--radius-sm);
-    color: var(--dark-700);
-    padding: 5px 10px;
-  }
-`;
-
+import {
+  StyledCartProduct,
+  StyledCartProductImage,
+  StyledCartProductData,
+  StyledCartProductHeader,
+  StyledCartProductActions,
+  StyledCartProductQte,
+} from "../../styles/styled-cart";
 const loaderExtraStyles = `
   position: absolute;
   top: 0;

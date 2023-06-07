@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { getIds } from "./features/cart-slice";
 import { getCategories } from "./features/categories-slice";
 import { isLoggedIn } from "./features/auth-slice";
 
@@ -13,6 +14,7 @@ import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 if (process.env.REACT_APP_ENV === "production") disableReactDevTools();
 
 store.dispatch(getCategories());
+store.dispatch(getIds());
 store.dispatch(isLoggedIn());
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

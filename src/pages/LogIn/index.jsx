@@ -98,6 +98,7 @@ const Index = () => {
               qte: item.qte,
               saveLater: item.saveLater,
               price: item.price,
+              store: item.store,
             })
         );
         console.log(JSON.parse(localStorage.getItem("visits")));
@@ -126,7 +127,9 @@ const Index = () => {
         localStorage.setItem("search", JSON.stringify(updatedSearches));
 
         dispatch(updateIds(ids));
-        navigate(`/${searchParams.get("navigate")}` || -1);
+        navigate(
+          searchParams.get("navigate") ? `/${searchParams.get("navigate")}` : -1
+        );
       }
     } catch (e) {
       console.log(e);

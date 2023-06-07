@@ -46,6 +46,7 @@ const Actions = ({ product }) => {
             product: product._id,
             qte: Number(quantity),
             price: product.price,
+            store: product.store_id,
           },
         ],
         { headers: { Authorization: localStorage.getItem("token") } }
@@ -54,7 +55,12 @@ const Actions = ({ product }) => {
     } finally {
       setLoading(false);
       dispatch(
-        setIds({ _id: product._id, qte: quantity, price: product.price })
+        setIds({
+          _id: product._id,
+          qte: quantity,
+          price: product.price,
+          store: product.store_id,
+        })
       );
     }
   };

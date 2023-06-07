@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { StyledButton } from "../../styles";
+import { Link } from "react-router-dom";
 
 const StyledCheckOutContaier = styled.div`
   width: 40%;
@@ -36,10 +37,12 @@ const CheckoutButton = () => {
         {Object.values(ids).reduce(
           (sum, item) => (item.saveLater ? sum : sum + item.qte),
           0
-        )}{" "}
+        )}
         items ): ${totle}
       </h3>
-      <StyledButton>Porceed To Checkout</StyledButton>
+      <StyledButton>
+        <Link to={"/checkout"}>Porceed To Checkout</Link>
+      </StyledButton>
     </StyledCheckOutContaier>
   );
 };

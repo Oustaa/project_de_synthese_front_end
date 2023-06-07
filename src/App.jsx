@@ -17,6 +17,7 @@ import StoreLayout from "./pages/store/Layout";
 import GlobalStyles from "./styles/globalStyles";
 import { useSelector } from "react-redux";
 import Loader from "./components/Loader";
+import CheckOut from "./pages/checkout";
 
 const App = () => {
   const { loading } = useSelector((state) => state.auth);
@@ -30,6 +31,7 @@ const App = () => {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LogIn />} />
+        <Route path="/checkout" element={<CheckOut />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/Cart" element={<Cart />} />

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const getCartProducts = createAsyncThunk("get/products", async (ids) => {
+export const getCartProducts = createAsyncThunk("get/products", async () => {
   const resp = await axios.post(`${process.env.REACT_APP_BASE_URL}/cart`, {
     ids: Object.keys(JSON.parse(localStorage.getItem("cart_products"))),
   });
@@ -27,12 +27,12 @@ const cartSlice = createSlice({
       state.ids = payload;
       localStorage.setItem("cart_products", JSON.stringify(payload));
     },
-    setIds: (state, { payload: { _id, qte, price } }) => {
+    setIds: (state, { payload: { _id, qte, price, store } }) => {
       if (state?.ids[_id]) state.ids[_id].qte += Number(qte);
       else
         state.ids = {
           ...state.ids,
-          [_id]: { qte: Number(qte), saveLater: false, price },
+          [_id]: { qte: Number(qte), saveLater: false, price, store },
         };
       localStorage.setItem("cart_products", JSON.stringify(state.ids));
     },

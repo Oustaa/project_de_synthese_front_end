@@ -9,8 +9,8 @@ export const StyledHeader = styled.header`
   aling-item: center;
   justify-content: space-between;
   padding-block: var(--spacing-lg);
-  border-bottom: 1px solid var(--dark-600);
   padding-inline: var(--spacing-xxl);
+  border-bottom: 1px solid var(--dark-600);
 `;
 
 export const StyledSearchForm = styled.form`

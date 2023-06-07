@@ -4,6 +4,7 @@ export const StyledContainer = styled.div`
   width: calc(100% - var(--spacing-xxl));
   max-width: 1700px;
   margin-inline: auto;
+  ${({ extraStyles }) => extraStyles};
 `;
 
 export const InputGroup = styled.div`
@@ -60,6 +61,9 @@ export const StyledButton = styled.button`
   border: none;
   border-radius: var(--radius-lg);
   color: ${({ color }) => (color ? color : "var(--white)")};
+  a {
+    color: white;
+  }
   ${({ extraStyles }) => extraStyles};
 `;
 
