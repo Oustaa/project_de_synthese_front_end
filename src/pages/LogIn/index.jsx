@@ -101,7 +101,7 @@ const Index = () => {
               store: item.store,
             })
         );
-        console.log(JSON.parse(localStorage.getItem("visits")));
+
         // update it's visits
         const updateUsereVisits = await axios.post(
           `${process.env.REACT_APP_BASE_URL}/users/visits`,
@@ -125,6 +125,17 @@ const Index = () => {
 
         const updatedSearches = await updateUsereSearch.data;
         localStorage.setItem("search", JSON.stringify(updatedSearches));
+
+        // updating the wishlist
+        const wishlistResp = await axios.post(
+          `${process.env.REACT_APP_BASE_URL}/users/wishlist`,
+          { wishlist: JSON.parse(localStorage.getItem("wishlist")) || [] },
+          { headers: { Authorization: localStorage.getItem("token") } }
+        );
+
+        const wishlist = await wishlistResp.data;
+        console.log(wishlist);
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
 
         dispatch(updateIds(ids));
         navigate(

@@ -65,6 +65,27 @@ const Actions = ({ product }) => {
     }
   };
 
+  const addToWishListHandler = async () => {
+    if (loading) return;
+    try {
+      setLoading(true);
+      await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/users/wishlist`,
+        { wishlist: [product._id] },
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+    } catch (error) {
+    } finally {
+      setLoading(false);
+
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || []);
+      localStorage.setItem(
+        "wishlist",
+        JSON.stringify([product._id, ...wishlist])
+      );
+    }
+  };
+
   return (
     <StyledCart>
       <h3>Buy it now:</h3>
@@ -98,9 +119,11 @@ const Actions = ({ product }) => {
               "Add to cart"
             )}
           </StyledButton>
-          <StyledButton>Add to wishlist</StyledButton>
+          <StyledButton onClick={addToWishListHandler}>
+            Add to wishlist
+          </StyledButton>
         </FlexContainer>
-        <StyledButton extraStyles={`width: 100%;`}>Buy it now</StyledButton>
+        {/* <StyledButton extraStyles={`width: 100%;`}>Buy it now</StyledButton> */}
       </InputGroup>
     </StyledCart>
   );

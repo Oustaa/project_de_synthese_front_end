@@ -97,6 +97,7 @@ export const StyledNav = styled.nav`
 export const StyledLinks = styled.div`
   display: flex;
   aling-item: center;
+ 
   gap: var(--spacing-xl);
   padding-block: var(--spacing-lg);
 

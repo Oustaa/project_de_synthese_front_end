@@ -8,6 +8,7 @@ import {
 import getSymbolFromCurrency from "currency-symbol-map";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { getPrice } from "../../utils/changePrice";
 
 function isElementVisible(element) {
   if (!element) return;
@@ -20,34 +21,6 @@ function isElementVisible(element) {
 
 async function viewedProduct(id) {
   axios.put(`${process.env.REACT_APP_BASE_URL}/products/viewed/${id}`);
-}
-
-async function getPrice({ from, to, value }, cb) {
-  const options = {
-    method: "GET",
-    url: "https://currency-converter-pro1.p.rapidapi.com/convert",
-    params: {
-      from: from,
-      to: to,
-      amount: value,
-    },
-    headers: {
-      "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_X_KEY,
-      "X-RapidAPI-Host": "currency-converter-pro1.p.rapidapi.com",
-    },
-  };
-
-  try {
-    if (from === to) {
-      cb(value);
-    } else {
-      const response = await axios.request(options);
-      const data = await response.data;
-      cb(data.result);
-    }
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 const ProductCard = ({

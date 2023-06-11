@@ -44,6 +44,7 @@ const Currency = () => {
 
   const currencyChangeHandler = (e) => {
     dispatch(setCurrency(e.target.value));
+    localStorage.setItem("currency", e.target.value);
   };
 
   return (

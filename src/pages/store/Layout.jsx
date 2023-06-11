@@ -26,7 +26,6 @@ const Layout = () => {
   const [store, setStore] = useState({ value: {}, loading: true });
   useEffect(() => {
     getStore(id, setStore);
-    console.log(id);
   }, [id]);
 
   return (

@@ -8,6 +8,7 @@ import {
   StyledCartProductActions,
   StyledCartProductQte,
 } from "../../styles/styled-cart";
+import getSymbolFromCurrency from "currency-symbol-map";
 
 const StyledOrderItem = styled.div`
   display: flex;
@@ -46,6 +47,10 @@ const OrderItem = ({ product, orderItems, setOrderItems }) => {
         <StyledCartProductData>
           <StyledCartProductHeader>
             <h3>{product.title.substring(0, 80)}...</h3>
+            <h2>
+              {getSymbolFromCurrency(product.currency)}
+              {product.price}
+            </h2>
           </StyledCartProductHeader>
           <StyledCartProductActions>
             <StyledCartProductQte>

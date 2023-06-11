@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Link } from "react-router-dom";
 import {
@@ -17,6 +17,8 @@ import {
   StyledCartProductActions,
   StyledCartProductQte,
 } from "../../styles/styled-cart";
+import { getPrice } from "../../utils/changePrice";
+
 const loaderExtraStyles = `
   position: absolute;
   top: 0;
@@ -28,9 +30,22 @@ const loaderExtraStyles = `
 `;
 
 const CartProduct = ({ images, store, title, price, currency, _id }) => {
+  const { currency: userCurrency } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [updateQte, setUpdateQte] = useState(false);
   const dispatch = useDispatch();
+  const [convertedPrice, setConvertedPrice] = useState(0.0);
+
+  useEffect(() => {
+    getPrice(
+      {
+        from: currency,
+        to: userCurrency || localStorage.getItem("currency") || currency,
+        value: price,
+      },
+      setConvertedPrice
+    );
+  }, [userCurrency, currency, price]);
   const { qte, saveLater: savedLater } = useSelector((state) => state.cart.ids)[
     _id
   ];
@@ -105,8 +120,8 @@ const CartProduct = ({ images, store, title, price, currency, _id }) => {
               <Link to={`/product/${_id}`}>{title.substring(0, 80)}...</Link>
             </h3>
             <h2>
-              {getSymbolFromCurrency(currency)}
-              {price}
+              {getSymbolFromCurrency(userCurrency)}
+              {convertedPrice.toFixed(2)}
             </h2>
           </StyledCartProductHeader>
           <StyledCartProductActions>

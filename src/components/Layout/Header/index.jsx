@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   StyledNavBar,
   StyledHeader,
@@ -6,17 +6,17 @@ import {
   StyledActions,
   StyledNav,
   StyledLinks,
-} from "../../styles/styled-header";
-import { StyledButton } from "../../styles";
+} from "../../../styles/styled-header";
+import { StyledButton } from "../../../styles";
 import { Link } from "react-router-dom";
-import { BsCart, BsPerson } from "react-icons/bs";
-import { CiLogout } from "react-icons/ci";
+import { BsCart } from "react-icons/bs";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { toggleMenu } from "../../features/ui-slice";
-import Search from "./Search";
+import { toggleMenu } from "../../../features/ui-slice";
+import Search from "../Search";
+import UserDropDown from "./UserDropDown";
 
 const StyledSubCategories = styled.div`
   display: flex;
@@ -26,16 +26,10 @@ const StyledSubCategories = styled.div`
 `;
 
 const Header = () => {
-  const username = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
 
   const categories = useSelector((state) => state.categories.value);
   const openMenu = useSelector((state) => state.ui.openMenu);
-
-  const logOut = () => {
-    localStorage.clear();
-    window.location.reload(false);
-  };
 
   return (
     <StyledNavBar>
@@ -51,20 +45,7 @@ const Header = () => {
           <Link to={"/cart"}>
             Your Cart <BsCart />
           </Link>
-          {username ? (
-            <>
-              <Link to="/profile/">
-                {username} <BsPerson />
-              </Link>
-              <Link onClick={logOut}>
-                Log out <CiLogout />
-              </Link>
-            </>
-          ) : (
-            <Link to="/login">
-              Log in <BsPerson />
-            </Link>
-          )}
+          <UserDropDown />
         </StyledActions>
       </StyledHeader>
       <StyledNav openMenu={openMenu}>

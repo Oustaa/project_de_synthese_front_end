@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import CartProduct from "./CartProduct";
 import { useEffect } from "react";
+import { getPrice } from "../../utils/changePrice";
 
 const StyledCartContainer = styled.div`
   padding: var(--spacing-xl);

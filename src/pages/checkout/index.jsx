@@ -5,6 +5,7 @@ import UserInfo from "./UserInfo";
 import PaymentInfo from "./PaymentInfo";
 import { StyledContainer } from "../../styles";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 /*
     Order Structure
@@ -39,25 +40,24 @@ const COMPONENTS = [OrderItems, UserInfo, PaymentInfo];
 const TITLE = ["Order's Items", "User Info", "Payment"];
 
 const CheckOut = () => {
+  const { currency } = useSelector((state) => state.auth);
+
   const [order, setOrder] = useState({
     items: [],
     user: {},
     total: 0,
+    currency: currency || "USD",
   });
   const [step, setStep] = useState(0);
 
   const RendredStep = COMPONENTS[step];
-
-  useEffect(() => {
-    console.log(order);
-  }, [order]);
 
   return (
     <>
       <Layout title={TITLE[step]} />
       <main>
         <StyledContainer extraStyles={extraStyles}>
-          <RendredStep setOrder={setOrder} setStep={setStep} />
+          <RendredStep setOrder={setOrder} order={order} setStep={setStep} />
         </StyledContainer>
       </main>
     </>

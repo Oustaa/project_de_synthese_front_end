@@ -13,6 +13,8 @@ import Register from "./pages/Rejester";
 import Layout from "./components/Layout/Layout";
 import Store from "./pages/store";
 import StoreLayout from "./pages/store/Layout";
+import Orders from "./pages/Orders";
+import WishList from "./pages/WishList";
 
 import GlobalStyles from "./styles/globalStyles";
 import { useSelector } from "react-redux";
@@ -39,6 +41,8 @@ const App = () => {
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/products/:id" element={<ProductsByCategory />} />
           <Route path="/products/sub/:id" element={<ProductsBySubCategory />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="/store/:id" element={<StoreLayout />}>
             <Route index element={<Store />} />
             <Route path="products" element={<Products />} />
